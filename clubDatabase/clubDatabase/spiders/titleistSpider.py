@@ -1,6 +1,6 @@
 import scrapy
 
-class TitleistClubLinks(scrapy.Spider):
+class TitleistSpider(scrapy.Spider):
     name = 'titleistSpider'
     allowed_domains = ['titleist.com']
     start_urls = ['https://www.titleist.com/golf-clubs/']
