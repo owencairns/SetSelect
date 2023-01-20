@@ -7,11 +7,11 @@
 #     https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
 #     https://docs.scrapy.org/en/latest/topics/spider-middleware.html
 
+
 BOT_NAME = 'clubDatabase'
 
 SPIDER_MODULES = ['clubDatabase.spiders']
 NEWSPIDER_MODULE = 'clubDatabase.spiders'
-
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = 'clubDatabase (+http://www.yourdomain.com)'
