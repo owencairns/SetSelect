@@ -3,16 +3,23 @@ import scrapy
 class PgaTourSuperstoreSpider(scrapy.Spider):
     name = 'ptsSpider'
     allowed_domains = ['pgatoursuperstore.com']
-    start_urls = ['https://www.pgatoursuperstore.com/golf-clubs/drivers/?sz=1000',
-                  'https://www.pgatoursuperstore.com/golf-clubs/irons-sets/?sz=1000',
-                  'https://www.pgatoursuperstore.com/golf-clubs/putters/?sz=1000',
-                  'https://www.pgatoursuperstore.com/golf-clubs/fairway-metals/?sz=1000',
-                  'https://www.pgatoursuperstore.com/golf-clubs/hybrids/?sz=1000',
-                  'https://www.pgatoursuperstore.com/golf-clubs/wedges/?sz=1000']
-
+    start_urls = ['https://www.pgatoursuperstore.com/golf-clubs/drivers/?start=0&sz=11&format=page-element',
+                  'https://www.pgatoursuperstore.com/golf-clubs/irons-sets/?start=0&sz=11&format=page-element',
+                  'https://www.pgatoursuperstore.com/golf-clubs/putters/?start=0&sz=11&format=page-element',
+                  'https://www.pgatoursuperstore.com/golf-clubs/fairway-metals/?start=0&sz=11&format=page-element',
+                  'https://www.pgatoursuperstore.com/golf-clubs/hybrids/?start=0&sz=11&format=page-element',
+                  'https://www.pgatoursuperstore.com/golf-clubs/wedges/?start=0&sz=11&format=page-element',
+                  'https://www.pgatoursuperstore.com/golf-clubs/completesets/?start=0&sz=11&format=page-element',
+                  'https://www.pgatoursuperstore.com/golf-clubs-womensclubs/?start=0&sz=11&format=page-element']
+    
     def parse(self, response):
         for link in response.css('div.product-tile a::attr(href)'):
             yield response.follow(link.get(), callback=self.parse_club)
+        next = response.css('a.infinite-scroll-loader::attr(data-grid-url)').get()
+        if not next:
+            next = response.css('a.infinite-scroll-placeholder::attr(data-grid-url)').get()
+        if next:
+            yield response.follow(next, callback=self.parse)
 
     def parse_club(self, response):
         club_name = response.css('h1.product-name::text').get()
