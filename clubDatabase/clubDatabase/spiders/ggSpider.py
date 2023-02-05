@@ -29,10 +29,12 @@ class GolfGalaxySpider(scrapy.Spider):
         if max_price:
             max_price.strip()
             price = price + '-' + max_price
+        image = response.css('img[data-cy="product-image"]::attr(src)').get()
         link = response.url
 
         yield {
             'name': club_name.strip(),
             'price': price,
-            'link': link
+            'link': link,
+            'image': image
         }
