@@ -23,6 +23,8 @@ class PgaTourSuperstoreSpider(scrapy.Spider):
 
     def parse_club(self, response):
         club_name = response.css('h1.product-name::text').get()
+        if club_name:
+            club_name.strip()
         price = response.css('span.price-sales::text').get()
         if price:
             price = price.strip()
@@ -33,9 +35,13 @@ class PgaTourSuperstoreSpider(scrapy.Spider):
             else:
                 price = 'Not Found'
         link = response.url
-
+        condition = 'new'
+        split_link = link.split('-')
+        club_type = split_link[len(split_link) - 1]
         yield {
-            'name': club_name.strip(),
+            'name': club_name,
+            'type': club_type,
             'price': price,
-            'link': link
+            'link': link,
+            'condition': condition
         }
