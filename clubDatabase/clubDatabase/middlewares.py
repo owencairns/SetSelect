@@ -4,10 +4,24 @@
 # https://docs.scrapy.org/en/latest/topics/spider-middleware.html
 
 from scrapy import signals
+import random
+from .settings import USERAGENTS
 
 # useful for handling different item types with a single interface
 from itemadapter import is_item, ItemAdapter
 
+class ShowHeadersMiddleware:
+    def process_request(self, request, spider):
+        print(f'Request Headers: {request.headers}')
+    
+    def process_response(self, request, response, spider):
+        print(f'Response Headers: {response.headers}')
+        return response
+
+class RotateUserAgentMiddleware:
+    def process_request(self, request, spider):
+        user_agent = random.choice(USERAGENTS)
+        request.headers['User-Agent'] = user_agent
 
 class ClubdatabaseSpiderMiddleware:
     # Not all methods need to be defined. If a method is not defined,

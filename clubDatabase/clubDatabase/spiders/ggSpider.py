@@ -10,7 +10,7 @@ class GolfGalaxySpider(scrapy.Spider):
         num_products = num_products[1].split()
         total = int(num_products[0])
         url = 'https://prod-catalog-product-api.dickssportinggoods.com/v2/search?searchVO=%7B%22selectedCategory%22%3A%2210051_76724%22%2C%22selectedStore%22%3A%22420%22%2C%22selectedSort%22%3A5%2C%22selectedFilters%22%3A%7B%7D%2C%22storeId%22%3A10701%2C%22pageNumber%22%3A{}%2C%22pageSize%22%3A144%2C%22totalCount%22%3A{}%2C%22searchTypes%22%3A%5B%22PINNING%22%5D%2C%22isFamilyPage%22%3Atrue%2C%22snbAudience%22%3A%22%22%7D'
-        for i in range(int(total/144) + 1):
+        for i in range(int(total/144) + 2):
             yield response.follow(url.format(i, total), self.parse_json)
 
     def parse_json(self, response):
@@ -31,6 +31,7 @@ class GolfGalaxySpider(scrapy.Spider):
         if max_price:
             max_price.strip()
             price = price + '-' + max_price
+        image = response.css('img[data-cy="product-image"]::attr(src)').get()
         link = response.url
         condition = 'new'
         if ('used' or 'Used') in club_name:
@@ -57,5 +58,9 @@ class GolfGalaxySpider(scrapy.Spider):
             'type': club_type,
             'price': price,
             'link': link,
+<<<<<<< HEAD
             'condition': condition
+=======
+            'image': image
+>>>>>>> 15f0c02a72e7c9a3079ff38f72dce0aefeea621f
         }
